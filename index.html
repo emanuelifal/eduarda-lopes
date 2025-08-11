@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Meu Amor ❤️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #1e1e2f, #2e2e3f);
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px 20px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid #ff66b2;
+      margin-bottom: 20px;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(255, 102, 178, 0.5);
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 90%;
+      margin: auto;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 1.8em;
+    }
+
+    p {
+      font-size: 1em;
+      line-height: 1.6em;
+    }
+
+    button {
+      margin: 15px 5px;
+      padding: 12px 20px;
+      background: #ff66b2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #ff3385;
+      transform: scale(1.05);
+    }
+
+    #mensagemSecreta {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #ff99cc;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    #mensagemSecreta.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @media (min-width: 600px) {
+      .image {
+        width: 180px;
+        height: 180px;
+      }
+
+      .card {
+        max-width: 700px;
+        padding: 35px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      p {
+        font-size: 1.1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="heartCanvas"></canvas>
+
+  <div class="container">
+    <img src="foto-eduarda.jpg" alt="Foto nossa" class="image" />
+    
+    <div class="card">
+      <h1>Opa, Lopes!💌</h1>
+      <blockquote style="font-style: italic; color: #ffb6c1; margin-top: 20px;">
+        "A mulher que teme ao Senhor, essa será louvada." <br> 
+        <span style="font-size: 0.9em;">— Provérbios 31:30</span>
+      </blockquote>
+      
+      <p>
+        Eu não tive muito tempo pra pensar em como iria executar essa ideia, pq eu tive ela hoje kkkkk (sim, no dia 11-08), mas eu quis colocar em prática por conta da saudades que eu tava de programar e principalmente de você. 💻💕✨
+      </p>
+      <br>
+      <p>Posso te pedir uma coisa?</p>
+      <p>Dá play no botão da música e fecha os olhos, lembra dos nossos momentos juntos, eu sei que não foram muitos, mas é sobre qualidade e não quantidade. Eu dedico as duas primeiras músicas desse pout-pourri pra você.</p>
+      <p>Se cuida, viu? beijo, eu espero que tenha gostado :)</p>
+      <button id="botaoMusica" onclick="tocarOuPausarMusica()">Tocar nossa música 🎶</button>
+      <button onclick="mostrarMensagem()">Mostrar mensagem secreta 💖</button>
+
+      <p id="mensagemSecreta" style="font-style: italic; font-size: 1.2em; color: #ffcce6;">O teu abraço é uma oração silenciosa. Nele, eu sinto paz, amor e a certeza de que Deus está sempre presente, mesmo nos momentos difíceis. 💖</p>
+    </div>
+  </div>
+
+  <audio id="musica" src="musica-eduarda.mp3"></audio>
+
+  <script>
+    const musica = document.getElementById("musica");
+    const botaoMusica = document.getElementById("botaoMusica");
+
+    function tocarOuPausarMusica() {
+      if (musica.paused) {
+        musica.play();
+        botaoMusica.textContent = "Pausar música ⏸️";
+      } else {
+        musica.pause();
+        botaoMusica.textContent = "Tocar sua música 🎶";
+      }
+    }
+
+    function mostrarMensagem() {
+      const msg = document.getElementById("mensagemSecreta");
+      if (!msg.classList.contains("visible")) {
+        msg.classList.add("visible");
+      }
+    }
+
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const hearts = [];
+    const heartCount = 30;
+
+    function createHeart() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        size: 20 + Math.random() * 10,
+        speed: 1 + Math.random() * 2,
+        opacity: 0.5 + Math.random() * 0.5
+      };
+    }
+
+    for (let i = 0; i < heartCount; i++) {
+      hearts.push(createHeart());
+    }
+
+    function drawHeart(x, y, size, opacity) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x, y - size / 2, x - size, y - size / 2, x - size, y);
+      ctx.bezierCurveTo(x - size, y + size, x, y + size * 1.5, x, y + size * 2);
+      ctx.bezierCurveTo(x, y + size * 1.5, x + size, y + size, x + size, y);
+      ctx.bezierCurveTo(x + size, y - size / 2, x, y - size / 2, x, y);
+      ctx.fillStyle = `rgba(255, 105, 180, ${opacity})`;
+      ctx.fill();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let heart of hearts) {
+        drawHeart(heart.x, heart.y, heart.size, heart.opacity);
+        heart.y += heart.speed;
+        if (heart.y > canvas.height + heart.size * 2) {
+          Object.assign(heart, createHeart());
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
